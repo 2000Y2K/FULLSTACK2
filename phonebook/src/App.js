@@ -1,17 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import Query from './components/HandleChange'
+import axios from 'axios'
 
 const App = () => {
-  const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas',
-    numb: '0800-000-111',
-    id: 1 }
-    ])
+  const [ persons, setPersons ] = useState([])
   const [ newName, setNewName ] = useState('')
   const [NewNumb, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
 
+  useEffect(()=>{
+    axios.get('http://localhost:3001/persons').then(response =>{
+      setPersons(response.data)
+    })
+   },
+  []
+  )
   const handleChange = (event) => {
     setNewName(event.target.value)
   }
@@ -36,7 +40,7 @@ const App = () => {
     else{
     const personObject = {
       name: newName,
-      numb: NewNumb,
+      number: NewNumb,
       id: persons.length + 1,
     }
     setPersons(persons.concat(personObject))
