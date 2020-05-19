@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import Query from './components/HandleChange'
 import axios from 'axios'
+import { render } from '@testing-library/react'
+import ReactDOM from 'react-dom'
 
 const App = () => {
   const [ persons, setPersons ] = useState([])
@@ -51,23 +53,19 @@ const App = () => {
 const showSearch = (event) => {
   event.preventDefault()
   console.log("this is showSearch",search)
-  //const names = persons.map(person => person.name.toLowerCase())
-   // if (names.includes(search.toLowerCase())){
-//window.alert(`${search} is in the phonebook`);
-   // }
-   // else{
-   // window.alert(`${search} is not on the phonebook`);
-   // }
    const obj = persons.find(n => n.name.toLocaleLowerCase() === search.toLocaleLowerCase())
    const found = {...obj}
    console.log(found)
    if (obj !== undefined){
-    window.alert(`    Name: ${obj.name}
-    Number: ${obj.number}`)
-    setSearch("") 
+    ReactDOM.render(`${obj.name} ${obj.number}`,document.getElementById("query"));
+    setSearch("")}
+    else {
+      ReactDOM.render(`${search} is not in the phonebook`,document.getElementById("query"));
+      setSearch("") 
+    }
    }
 
-}
+
   return (
     <>
     <h1>Phonebook</h1>
