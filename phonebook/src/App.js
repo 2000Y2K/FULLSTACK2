@@ -26,7 +26,7 @@ const App = () => {
     setSearch(event.target.value)
     console.log("this is the search ",search)
   }
-  
+
   const addName = (event) => {
     event.preventDefault()
     console.log(persons)
@@ -51,14 +51,22 @@ const App = () => {
 const showSearch = (event) => {
   event.preventDefault()
   console.log("this is showSearch",search)
-  const names = persons.map(person => person.name.toLowerCase())
-    console.log(names)
-    if (names.includes(search.toLowerCase())){
-      window.alert(`${search} is in the phonebook`);
-    }
-    else{
-    window.alert(`${search} is not on the phonebook`);
-    }
+  //const names = persons.map(person => person.name.toLowerCase())
+   // if (names.includes(search.toLowerCase())){
+//window.alert(`${search} is in the phonebook`);
+   // }
+   // else{
+   // window.alert(`${search} is not on the phonebook`);
+   // }
+   const obj = persons.find(n => n.name.toLocaleLowerCase() === search.toLocaleLowerCase())
+   const found = {...obj}
+   console.log(found)
+   if (obj !== undefined){
+    window.alert(`    Name: ${obj.name}
+    Number: ${obj.number}`)
+    setSearch("") 
+   }
+
 }
   return (
     <>
