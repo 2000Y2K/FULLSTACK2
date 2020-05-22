@@ -1,29 +1,14 @@
 {
   "persons": [
     {
-      "name": "Dan Abramov",
-      "number": "666",
-      "id": 3
-    },
-    {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
-      "id": 4
-    },
-    {
-      "name": "asd",
-      "number": "123",
-      "id": 5
-    },
-    {
-      "name": "jajajaj",
-      "number": "25555",
-      "id": 6
-    },
-    {
       "name": "Arto Hellas",
-      "number": "64554654564",
-      "id": 7
+      "number": "55656666",
+      "id": 2
+    },
+    {
+      "name": "asdfasdgssat",
+      "number": "",
+      "id": 5
     }
   ]
 }

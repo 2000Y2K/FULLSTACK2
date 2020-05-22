@@ -3,12 +3,15 @@ import Persons from './components/Persons'
 import Query from './components/HandleChange'
 import ReactDOM from 'react-dom'
 import phoneService from './services/phoneService'
+import Message from './components/Message'
 
 const App = () => {
   const [ persons, setPersons ] = useState([])
   const [ newName, setNewName ] = useState('')
   const [NewNumb, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
+  const [message, setMessage] = useState('')
+  const [type, setType] = useState('')
 
   useEffect(() => {phoneService.getAll()
     .then(response => setPersons(response))},[persons])
@@ -28,12 +31,20 @@ const App = () => {
     const names = persons.map(person => person.name.toLocaleLowerCase())
     console.log("this is the names",names)
     if (names.includes(newName.toLocaleLowerCase())){
-      
       const contact = persons.find(n => n.name.toLocaleLowerCase() === newName.toLocaleLowerCase())
       console.log("this is contact",contact)
       const changedcontact = {...contact, number: NewNumb}
       if(window.confirm(`${newName} is already added to phonebook,replace the old number with a new one?`)){
-        phoneService.changeNumber(contact,changedcontact)
+        phoneService.changeNumber(contact,changedcontact).catch(error =>{
+          setMessage(`${newName} was already removed from the server`)
+          setType("error")
+          setTimeout(() => setMessage(""),4000)
+        })
+        setMessage(`${newName} number was change in the server`)
+        setType("success")
+        setTimeout(() =>{
+          setMessage(null)
+        },4000 )
         setNewName('')
         setNewNumber('')
       }
@@ -48,6 +59,11 @@ const App = () => {
       number: NewNumb,
     }
     setPersons(persons.concat(personObject))
+    setMessage(`${newName} was added to the server`)
+    setType("success")
+    setTimeout(() =>{
+      setMessage(null)
+    },4000 )
     phoneService.addPerson(personObject)
     console.log(names)
     console.log(persons)
@@ -74,6 +90,7 @@ const showSearch = (event) => {
   return (
     <>
     <h1>Phonebook</h1>
+    <Message message={message} type={type}></Message>
     <Query showSearch={showSearch} search={search} handleChange={handleChange2}></Query>
       <h2>add a new</h2>
       <form onSubmit={addName} >
