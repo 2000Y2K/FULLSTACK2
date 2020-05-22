@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import Query from './components/HandleChange'
-import axios from 'axios'
-import { render } from '@testing-library/react'
 import ReactDOM from 'react-dom'
+import phoneService from './services/phoneService'
 
 const App = () => {
   const [ persons, setPersons ] = useState([])
@@ -11,13 +10,8 @@ const App = () => {
   const [NewNumb, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
 
-  useEffect(()=>{
-    axios.get('http://localhost:3001/persons').then(response =>{
-      setPersons(response.data)
-    })
-   },
-  []
-  )
+  useEffect(() => {phoneService.getAll()
+    .then(response => setPersons(response))},[persons])
   const handleChange = (event) => {
     setNewName(event.target.value)
   }
@@ -31,21 +25,32 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault()
-    console.log(persons)
-    const names = persons.map(person => person.name)
-    console.log(names)
-    if (names.includes(newName)){
-      window.alert(`${newName} is already added to phonebook`);
-      setNewName('')
-      setNewNumber('')
+    const names = persons.map(person => person.name.toLocaleLowerCase())
+    console.log("this is the names",names)
+    if (names.includes(newName.toLocaleLowerCase())){
+      
+      const contact = persons.find(n => n.name.toLocaleLowerCase() === newName.toLocaleLowerCase())
+      console.log("this is contact",contact)
+      const changedcontact = {...contact, number: NewNumb}
+      if(window.confirm(`${newName} is already added to phonebook,replace the old number with a new one?`)){
+        phoneService.changeNumber(contact,changedcontact)
+        setNewName('')
+        setNewNumber('')
+      }
+      else {
+        setNewName('')
+        setNewNumber('')
+      }
     }
     else{
     const personObject = {
       name: newName,
       number: NewNumb,
-      id: persons.length + 1,
     }
     setPersons(persons.concat(personObject))
+    phoneService.addPerson(personObject)
+    console.log(names)
+    console.log(persons)
     setNewName('')
     setNewNumber('')
   }
@@ -94,4 +99,4 @@ const showSearch = (event) => {
   )
 }
 
-export default App
+export default App;

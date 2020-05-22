@@ -12,4 +12,6 @@ onChange={handleChange}></input>
 </form>
 </>
 )
+
+
 export default Query;
